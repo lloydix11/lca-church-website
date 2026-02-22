@@ -9,22 +9,34 @@ interface Props {
 
 export async function generateMetadata({ params }: Props) {
   const { id } = await params;
-  const sermon = await prisma.sermon.findUnique({
-    where: { id: parseInt(id) },
-  });
-
-  return {
-    title: sermon?.title || "Sermon",
-    description: sermon?.description || "Listen to this sermon from Lighthouse Christian Assembly",
-  };
+  try {
+    const sermon = await prisma.sermon.findUnique({
+      where: { id: parseInt(id) },
+    });
+    return {
+      title: sermon?.title || "Sermon",
+      description: sermon?.description || "Listen to this sermon from Lighthouse Christian Assembly",
+    };
+  } catch (error) {
+    console.error("Failed to fetch sermon metadata:", error);
+    return {
+      title: "Sermon",
+      description: "Sermon from Lighthouse Christian Assembly",
+    };
+  }
 }
 
 export default async function SermonPage({ params }: Props) {
   const { id } = await params;
+  let sermon = null;
 
-  const sermon = await prisma.sermon.findUnique({
-    where: { id: parseInt(id) },
-  });
+  try {
+    sermon = await prisma.sermon.findUnique({
+      where: { id: parseInt(id) },
+    });
+  } catch (error) {
+    console.error("Failed to fetch sermon:", error);
+  }
 
   if (!sermon) {
     return (

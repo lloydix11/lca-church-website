@@ -24,9 +24,16 @@ const styles = `
 `;
 
 export default async function EventsPage() {
-  const events = await prisma.event.findMany({
-    orderBy: { date: "asc" },
-  });
+  let events = [];
+  try {
+    events = await prisma.event.findMany({
+      orderBy: { date: "asc" },
+    });
+  } catch (error) {
+    console.error("Failed to fetch events:", error);
+    // Return empty array if database is unavailable
+    events = [];
+  }
 
   return (
     <div className="bg-gradient-to-b from-primary-50 to-cream">

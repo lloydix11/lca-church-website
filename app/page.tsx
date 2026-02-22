@@ -66,15 +66,23 @@ const styles = `
 `;
 
 export default async function Home() {
-  const latestSermons = await prisma.sermon.findMany({
-    orderBy: { date: "desc" },
-    take: 3,
-  });
+  let latestSermons = [];
+  let upcomingEvents = [];
+  
+  try {
+    latestSermons = await prisma.sermon.findMany({
+      orderBy: { date: "desc" },
+      take: 3,
+    });
 
-  const upcomingEvents = await prisma.event.findMany({
-    orderBy: { date: "asc" },
-    take: 3,
-  });
+    upcomingEvents = await prisma.event.findMany({
+      orderBy: { date: "asc" },
+      take: 3,
+    });
+  } catch (error) {
+    console.error("Failed to fetch home page data:", error);
+    // Continue with empty arrays if database is unavailable
+  }
 
   return (
     <div>

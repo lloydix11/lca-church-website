@@ -24,9 +24,15 @@ const styles = `
 `;
 
 export default async function SermonsPage() {
-  const sermons = await prisma.sermon.findMany({
-    orderBy: { date: "desc" },
-  });
+  let sermons = [];
+  try {
+    sermons = await prisma.sermon.findMany({
+      orderBy: { date: "desc" },
+    });
+  } catch (error) {
+    console.error("Failed to fetch sermons:", error);
+    sermons = [];
+  }
 
   return (
     <div className="bg-gradient-to-b from-primary-50 to-cream">

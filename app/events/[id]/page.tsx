@@ -9,22 +9,34 @@ interface Props {
 
 export async function generateMetadata({ params }: Props) {
   const { id } = await params;
-  const event = await prisma.event.findUnique({
-    where: { id: parseInt(id) },
-  });
-
-  return {
-    title: event?.title || "Event",
-    description: event?.description || "Event at Lighthouse Christian Assembly",
-  };
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id: parseInt(id) },
+    });
+    return {
+      title: event?.title || "Event",
+      description: event?.description || "Event at Lighthouse Christian Assembly",
+    };
+  } catch (error) {
+    console.error("Failed to fetch event metadata:", error);
+    return {
+      title: "Event",
+      description: "Event at Lighthouse Christian Assembly",
+    };
+  }
 }
 
 export default async function EventPage({ params }: Props) {
   const { id } = await params;
+  let event = null;
 
-  const event = await prisma.event.findUnique({
-    where: { id: parseInt(id) },
-  });
+  try {
+    event = await prisma.event.findUnique({
+      where: { id: parseInt(id) },
+    });
+  } catch (error) {
+    console.error("Failed to fetch event:", error);
+  }
 
   if (!event) {
     return (
