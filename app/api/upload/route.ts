@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { put } from "@vercel/blob";
 
 export const dynamic = "force-dynamic";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,20 +12,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    // Upload to Vercel Blob
+    const blob = await put(file.name, file, {
+      access: "public",
+    });
 
-    const uploadsDir = join(process.cwd(), "public/uploads");
-    await mkdir(uploadsDir, { recursive: true });
-
-    const timestamp = Date.now();
-    const filename = `${timestamp}-${file.name.replace(/\s+/g, "-")}`;
-    const filepath = join(uploadsDir, filename);
-
-    await writeFile(filepath, buffer);
-
-    const url = `/uploads/${filename}`;
-    return NextResponse.json({ url }, { status: 201 });
+    return NextResponse.json({ url: blob.url }, { status: 201 });
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json(
