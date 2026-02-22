@@ -232,9 +232,7 @@ export default async function Home() {
           </p>
           <div className="grid md:grid-cols-3 gap-6 mb-10">
             {upcomingEvents.length > 0 ? (
-              upcomingEvents.map((event) => {
-                const isYouthCamp = event.title.toLowerCase().includes("youth") && event.title.toLowerCase().includes("camp");
-                return (
+              upcomingEvents.map((event) => (
                   <Link
                     key={event.id}
                     href={`/events/${event.id}`}
@@ -257,20 +255,9 @@ export default async function Home() {
                       <p className="text-gray-600 text-sm line-clamp-2">
                         {event.description}
                       </p>
-                      {isYouthCamp && (
-                        <Link 
-                          href="/camp"
-                          onClick={(e) => e.stopPropagation()}
-                          className="mt-4 pt-4 border-t block hover:opacity-80 transition" 
-                          style={{ borderColor: "#E8EDE8" }}
-                        >
-                          <p className="font-bold text-sm" style={{ color: "#6CBFDB" }}>Register Now →</p>
-                        </Link>
-                      )}
                     </div>
                   </Link>
-                );
-              })
+              ))
             ) : (
               <p className="text-gray-500 text-center col-span-3">
                 No events scheduled yet.

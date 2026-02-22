@@ -1,47 +1,7 @@
-"use client";
-
-import Link from "next/link";
-import { useState } from "react";
-import { CampRegistrationSchema } from "@/lib/validators";
-import { z } from "zod";
-
-const styles = `
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  .form-container {
-    animation: fadeInUp 0.6s ease-out;
-  }
-  .form-group {
-    animation: fadeInUp 0.6s ease-out forwards;
-  }
-  .form-group:nth-child(1) { animation-delay: 0.1s; }
-  .form-group:nth-child(2) { animation-delay: 0.15s; }
-  .form-group:nth-child(3) { animation-delay: 0.2s; }
-  .form-group:nth-child(4) { animation-delay: 0.25s; }
-  .form-group:nth-child(5) { animation-delay: 0.3s; }
-  .form-group:nth-child(6) { animation-delay: 0.35s; }
-  .form-group:nth-child(7) { animation-delay: 0.4s; }
-  .form-group:nth-child(8) { animation-delay: 0.45s; }
-  .submit-button {
-    animation: fadeInUp 0.6s ease-out 0.5s both;
-  }
-  .success-message {
-    animation: fadeInUp 0.4s ease-out;
-  }
-  .error-message {
-    animation: fadeInUp 0.4s ease-out;
-  }
-`;
+import { redirect } from "next/navigation";
 
 export default function CampPage() {
+  redirect("/events");
   const [formData, setFormData] = useState({
     fullName: "",
     facebookUrl: "",

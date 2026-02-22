@@ -50,9 +50,7 @@ export default async function EventsPage() {
 
         {events.length > 0 ? (
           <div className="space-y-6">
-            {events.map((event) => {
-              const isYouthCamp = event.title.toLowerCase().includes("youth") && event.title.toLowerCase().includes("camp");
-              return (
+            {events.map((event) => (
               <div key={event.id} className="event-card">
                 <Link
                   href={`/events/${event.id}`}
@@ -90,18 +88,8 @@ export default async function EventsPage() {
                     View Details →
                   </div>
                 </Link>
-                {isYouthCamp && (
-                  <Link
-                    href="/camp"
-                    className="mt-3 p-4 rounded block hover:opacity-90 transition font-semibold" 
-                    style={{ backgroundColor: "#A9C3A3", color: "#2F4F2F" }}
-                  >
-                    🎉 Youth Camp is coming soon! Click here to register now →
-                  </Link>
-                )}
               </div>
-            );
-            })}
+            ))}
           </div>
         ) : (
           <div className="text-center py-12">
