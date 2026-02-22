@@ -24,7 +24,7 @@ const styles = `
 `;
 
 export default async function EventsPage() {
-  let events = [];
+  let events: any[] = [];
   try {
     events = await prisma.event.findMany({
       orderBy: { date: "asc" },

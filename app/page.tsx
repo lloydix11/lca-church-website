@@ -66,8 +66,8 @@ const styles = `
 `;
 
 export default async function Home() {
-  let latestSermons = [];
-  let upcomingEvents = [];
+  let latestSermons: any[] = [];
+  let upcomingEvents: any[] = [];
   
   try {
     latestSermons = await prisma.sermon.findMany({

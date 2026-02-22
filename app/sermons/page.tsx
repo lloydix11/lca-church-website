@@ -24,7 +24,7 @@ const styles = `
 `;
 
 export default async function SermonsPage() {
-  let sermons = [];
+  let sermons: any[] = [];
   try {
     sermons = await prisma.sermon.findMany({
       orderBy: { date: "desc" },
