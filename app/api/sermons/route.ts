@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
 import { SermonSchema } from "@/lib/validators";
 
 export async function GET(req: NextRequest) {
