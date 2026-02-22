@@ -53,6 +53,29 @@ export default async function EventPage({ params }: Props) {
   const eventDate = new Date(event.date);
   const isPast = eventDate < new Date();
 
+  // Function to convert URLs in text to clickable links
+  const renderDescriptionWithLinks = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+    
+    return parts.map((part, index) => {
+      if (urlRegex.test(part)) {
+        return (
+          <a 
+            key={index}
+            href={part} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-accent hover:underline font-semibold"
+          >
+            {part}
+          </a>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
+
   return (
     <div className="bg-gradient-to-b from-primary-50 to-cream">
       <div className="container py-12">
@@ -109,7 +132,7 @@ export default async function EventPage({ params }: Props) {
             <div className="prose max-w-none mb-8">
               <h2 className="heading-md">About this Event</h2>
               <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-wrap">
-                {event.description}
+                {renderDescriptionWithLinks(event.description)}
               </p>
             </div>
 
