@@ -91,11 +91,13 @@ export default async function EventsPage() {
                   </div>
                 </Link>
                 {isYouthCamp && (
-                  <div className="mt-3 p-4 rounded" style={{ backgroundColor: "#A9C3A3" }}>
-                    <p className="font-semibold" style={{ color: "#2F4F2F" }}>
-                      🎉 Youth Camp is coming soon! Click above to register now.
-                    </p>
-                  </div>
+                  <Link
+                    href="/camp"
+                    className="mt-3 p-4 rounded block hover:opacity-90 transition font-semibold" 
+                    style={{ backgroundColor: "#A9C3A3", color: "#2F4F2F" }}
+                  >
+                    🎉 Youth Camp is coming soon! Click here to register now →
+                  </Link>
                 )}
               </div>
             );
