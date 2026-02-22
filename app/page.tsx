@@ -258,9 +258,14 @@ export default async function Home() {
                         {event.description}
                       </p>
                       {isYouthCamp && (
-                        <div className="mt-4 pt-4 border-t" style={{ borderColor: "#E8EDE8" }}>
+                        <Link 
+                          href="/camp"
+                          onClick={(e) => e.stopPropagation()}
+                          className="mt-4 pt-4 border-t block hover:opacity-80 transition" 
+                          style={{ borderColor: "#E8EDE8" }}
+                        >
                           <p className="font-bold text-sm" style={{ color: "#6CBFDB" }}>Register Now →</p>
-                        </div>
+                        </Link>
                       )}
                     </div>
                   </Link>

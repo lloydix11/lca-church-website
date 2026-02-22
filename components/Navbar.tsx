@@ -25,6 +25,9 @@ export function Navbar() {
           <Link href="/events" className="hover:text-accent transition">
             Events
           </Link>
+          <Link href="/camp" className="hover:text-accent transition font-bold" style={{ color: "#6CBFDB" }}>
+            Youth Camp
+          </Link>
           <Link href="/contact" className="hover:text-accent transition">
             Contact
           </Link>
