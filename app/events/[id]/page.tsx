@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function EventPage({ params }: Props) {
   const { id } = await params;
-  let event = null;
+  let event: any = null;
 
   try {
     event = await prisma.event.findUnique({

@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function SermonPage({ params }: Props) {
   const { id } = await params;
-  let sermon = null;
+  let sermon: any = null;
 
   try {
     sermon = await prisma.sermon.findUnique({
