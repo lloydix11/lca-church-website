@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+.env
+.env.local
+.env.*.local
+*.pem
+.DS_Store
+*.log
+*.pdf
+public/uploads/*
+!public/uploads/.gitkeep

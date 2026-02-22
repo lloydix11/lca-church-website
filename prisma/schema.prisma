@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Sermon {
+  id             Int      @id @default(autoincrement())
+  title          String
+  preacher       String
+  date           DateTime
+  description    String
+  youtubeUrl     String?
+  coverImageUrl  String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Event {
+  id              Int      @id @default(autoincrement())
+  title           String
+  date            DateTime
+  location        String
+  description     String
+  posterImageUrl  String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model CampRegistration {
+  id                       Int      @id @default(autoincrement())
+  fullName                 String
+  facebookUrl              String
+  contactNumber            String
+  emergencyContactNumber   String
+  invitedBy                String?
+  amountPaid               Float
+  screenshotSentEmail      Boolean
+  status                   String   @default("Pending")
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+}
+
+model ChurchSettings {
+  id                Int     @id @default(1)
+  churchName        String  @default("Lighthouse Christian Assembly")
+  address           String  @default("Psalm Base Talisay")
+  phone             String  @default("+63 (YOUR PHONE NUMBER)")
+  email             String  @default("info@lca.church")
+  sundayService     String  @default("9:30 AM")
+  wednesdayService  String  @default("5:00 PM")
+  updatedAt         DateTime @updatedAt
+}
