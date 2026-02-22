@@ -96,7 +96,7 @@ export default function NewEventPage() {
 
       let posterImageUrl = formData.posterImageUrl;
 
-      // Upload poster image if selected
+      // Upload poster image if selected (optional)
       if (posterImageFile) {
         const uploadFormData = new FormData();
         uploadFormData.append("file", posterImageFile);
@@ -106,12 +106,14 @@ export default function NewEventPage() {
           body: uploadFormData,
         });
 
-        if (!uploadRes.ok) {
-          throw new Error("Failed to upload poster image");
+        if (uploadRes.ok) {
+          const uploadData = await uploadRes.json();
+          posterImageUrl = uploadData.url;
+        } else {
+          // Image upload failed, but continue without image
+          console.warn("Image upload failed, event will be created without poster");
+          posterImageUrl = "";
         }
-
-        const uploadData = await uploadRes.json();
-        posterImageUrl = uploadData.url;
       }
 
       const res = await fetch("/api/events", {
