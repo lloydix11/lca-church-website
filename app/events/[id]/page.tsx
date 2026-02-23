@@ -98,7 +98,33 @@ export default async function EventPage({ params }: Props) {
   }
 
   const eventDate = new Date(event.date);
-  const isPast = eventDate < new Date();
+  
+  // Fix timezone issue - use the date as-is without timezone conversion
+  const getDateParts = (dateInput: any) => {
+    const date = new Date(dateInput);
+    // Add timezone offset to get the intended date
+    const utcDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+    return {
+      dateString: utcDate.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      dateShort: utcDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }),
+      fullYear: utcDate.getFullYear(),
+      timeString: utcDate.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+  };
+  
+  const dateParts = getDateParts(event.date);
+  const isPast = new Date(event.date) < new Date();
 
   // Function to convert URLs in text to clickable links
   const renderDescriptionWithLinks = (text: string) => {
@@ -122,6 +148,39 @@ export default async function EventPage({ params }: Props) {
       return <span key={index}>{part}</span>;
     });
   };
+
+  // Parse description into structured items
+  const parseDescriptionItems = (text: string) => {
+    const lines = text.split('\n').filter(line => line.trim());
+    const items: any[] = [];
+    
+    lines.forEach(line => {
+      const trimmed = line.trim();
+      // Check if this is a key detail (contains colon)
+      if (trimmed.includes(':')) {
+        const [label, ...rest] = trimmed.split(':');
+        items.push({
+          type: 'detail',
+          label: label.trim(),
+          value: rest.join(':').trim()
+        });
+      } else if (trimmed.match(/^\d+\s*Days?|^\d+\s*Nights?/)) {
+        items.push({
+          type: 'highlight',
+          value: trimmed
+        });
+      } else {
+        items.push({
+          type: 'text',
+          value: trimmed
+        });
+      }
+    });
+    
+    return items;
+  };
+
+  const descriptionItems = parseDescriptionItems(event.description);
 
   return (
     <div>
@@ -185,22 +244,13 @@ export default async function EventPage({ params }: Props) {
               <div className="flex-1">
                 <h3 className="text-sm font-bold uppercase tracking-wider" style={{ color: "#047857" }}>Date & Time</h3>
                 <p className="text-2xl font-bold text-gray-900 mt-2">
-                  {eventDate.toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  })}
+                  {dateParts.dateShort}
                 </p>
                 <p className="text-gray-600 mt-1">
-                  {eventDate.toLocaleDateString("en-US", {
-                    weekday: "long",
-                    year: "numeric",
-                  })}
+                  {dateParts.dateString}
                 </p>
                 <p className="text-accent font-semibold mt-2">
-                  {eventDate.toLocaleTimeString("en-US", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                  {dateParts.timeString}
                 </p>
               </div>
             </div>
@@ -228,13 +278,36 @@ export default async function EventPage({ params }: Props) {
       <section style={{ backgroundColor: "#FFF8F0" }} className="py-16">
         <div className="container max-w-4xl">
           <div className="detail-section bg-white rounded-xl p-8 md:p-12 shadow-lg">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ color: "#047857" }}>
+            <h2 className="text-3xl md:text-4xl font-bold mb-8" style={{ color: "#047857" }}>
               About this Event
             </h2>
-            <div className="prose prose-lg max-w-none">
-              <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-wrap">
-                {renderDescriptionWithLinks(event.description)}
-              </p>
+            <div className="space-y-6">
+              {descriptionItems.map((item, index) => {
+                if (item.type === 'detail') {
+                  return (
+                    <div key={index} className="flex gap-4 pb-4 border-b">
+                      <div className="font-bold text-lg min-w-fit" style={{ color: "#047857" }}>
+                        {item.label}:
+                      </div>
+                      <div className="text-gray-700 text-lg flex-1">
+                        {renderDescriptionWithLinks(item.value)}
+                      </div>
+                    </div>
+                  );
+                } else if (item.type === 'highlight') {
+                  return (
+                    <div key={index} className="px-4 py-3 rounded-lg text-lg font-semibold" style={{ backgroundColor: "#C5E0B8", color: "#047857" }}>
+                      ✨ {item.value}
+                    </div>
+                  );
+                } else {
+                  return (
+                    <p key={index} className="text-gray-700 text-lg leading-relaxed">
+                      {renderDescriptionWithLinks(item.value)}
+                    </p>
+                  );
+                }
+              })}
             </div>
           </div>
         </div>
