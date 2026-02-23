@@ -6,6 +6,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Lighthouse Christian Assembly",
   description: "Welcome to Lighthouse Christian Assembly - A place of faith, community, and spiritual growth.",
+  icons: {
+    icon: "/LCA Logo - no bg.png",
+  },
   openGraph: {
     title: "Lighthouse Christian Assembly",
     description: "Welcome to Lighthouse Christian Assembly - A place of faith, community, and spiritual growth.",
