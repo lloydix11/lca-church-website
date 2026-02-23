@@ -168,11 +168,7 @@ export default async function EventPage({ params }: Props) {
     return match ? match[0] : null;
   };
 
-  const descriptionUrl = extractRegistrationUrl(event.description);
-  
-  // Use description URL if available, otherwise use default camp registration URL
-  const campRegistrationUrl = "https://docs.google.com/forms/d/e/1FAIpQLSc9SyJ5ufuKw5sRji6j0D_goT0uiavskfNpNNfb9c6kc-FG8Q/viewform";
-  const registrationUrl = descriptionUrl || (event.title.toLowerCase().includes("camp") ? campRegistrationUrl : null);
+  const registrationUrl = extractRegistrationUrl(event.description);
 
   // Parse description into structured items
   const parseDescriptionItems = (text: string) => {
