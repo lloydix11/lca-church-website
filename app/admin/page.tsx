@@ -36,9 +36,9 @@ function AdminLoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-600 to-primary-700 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-lg shadow-xl p-8">
+        <div className="bg-white rounded-lg shadow-2xl p-8 border border-gray-200">
           <div className="text-center mb-8">
             <p className="text-4xl mb-2">⛪</p>
             <h1 className="text-2xl font-bold text-primary-700">Admin Portal</h1>
