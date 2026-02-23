@@ -371,15 +371,6 @@ export default async function EventPage({ params }: Props) {
       {/* CTA Section */}
       <section className="container py-16">
         <div className="max-w-4xl flex flex-col sm:flex-row gap-4">
-          {event.title.toLowerCase().includes("camp") && (
-            <Link
-              href="/camp"
-              className="flex-1 px-8 py-4 font-bold rounded-lg transition duration-300 text-center hover:shadow-lg hover:scale-105"
-              style={{ backgroundColor: "#6CBFDB", color: "white" }}
-            >
-              📝 Register Now
-            </Link>
-          )}
           <Link
             href="/events"
             className="flex-1 px-8 py-4 font-bold rounded-lg border-2 transition duration-300 text-center hover:shadow-lg hover:scale-105"
