@@ -128,7 +128,7 @@ export default async function EventPage({ params }: Props) {
 
   // Function to convert URLs in text to clickable links
   const renderDescriptionWithLinks = (text: string) => {
-    // Handle newlines and text together
+    // Handle newlines and text together - but exclude registration links
     const urlRegex = /(https?:\/\/[^\s\n]+)/g;
     let lastIndex = 0;
     const elements: any[] = [];
@@ -144,20 +144,7 @@ export default async function EventPage({ params }: Props) {
         );
       }
 
-      // Add the URL as a link
-      const url = match[0];
-      elements.push(
-        <a
-          key={`link-${match.index}`}
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-accent hover:text-accent hover:underline font-semibold inline-block break-all"
-        >
-          {url}
-        </a>
-      );
-
+      // Skip adding URL as link - we'll handle it separately
       lastIndex = urlRegex.lastIndex;
     }
 
@@ -173,6 +160,15 @@ export default async function EventPage({ params }: Props) {
     // If no URLs found, return the text as is
     return elements.length === 0 ? text : elements;
   };
+
+  // Extract registration URL from description
+  const extractRegistrationUrl = (text: string): string | null => {
+    const urlRegex = /(https?:\/\/[^\s\n]+)/g;
+    const match = urlRegex.exec(text);
+    return match ? match[0] : null;
+  };
+
+  const registrationUrl = extractRegistrationUrl(event.description);
 
   // Parse description into structured items
   const parseDescriptionItems = (text: string) => {
@@ -334,6 +330,22 @@ export default async function EventPage({ params }: Props) {
                 }
               })}
             </div>
+
+            {/* Registration Button */}
+            {registrationUrl && (
+              <div className="mt-10 pt-8 border-t-2">
+                <p className="text-gray-700 text-lg mb-4">Ready to join us?</p>
+                <a
+                  href={registrationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block px-8 py-4 font-bold rounded-lg transition duration-300 hover:shadow-lg hover:scale-105"
+                  style={{ backgroundColor: "#6CBFDB", color: "white" }}
+                >
+                  📝 Register Here
+                </a>
+              </div>
+            )}
           </div>
         </div>
       </section>
