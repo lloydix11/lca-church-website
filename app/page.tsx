@@ -97,6 +97,13 @@ export default async function Home() {
         
         <div className="container relative z-10">
           <div className="max-w-3xl mx-auto text-center">
+            <div className="mb-8 flex justify-center">
+              <img 
+                src="/LCA Logo - no bg.png" 
+                alt="LCA Logo" 
+                className="h-24 md:h-32 object-contain"
+              />
+            </div>
             <h1 className="hero-title text-5xl md:text-6xl font-bold mb-6 leading-tight">
               Welcome to Lighthouse Christian Assembly
             </h1>
@@ -108,22 +115,22 @@ export default async function Home() {
             </p>
             
             <div className="hero-buttons flex gap-4 justify-center flex-wrap mb-8">
-              <Link href="/about" className="px-8 py-3 font-bold rounded-lg hover:opacity-90 transition" style={{ backgroundColor: "#6CBFDB", color: "white" }}>
+              <Link href="/about" className="px-8 py-3 font-bold rounded-lg transition duration-300 hover:shadow-lg hover:scale-105" style={{ backgroundColor: "#6CBFDB", color: "white" }}>
                 Join Us This Sunday
               </Link>
-              <Link href="/events" className="px-8 py-3 border-2 border-white text-white font-bold rounded-lg hover:bg-white hover:text-primary-700 transition">
+              <Link href="/events" className="px-8 py-3 border-2 border-white text-white font-bold rounded-lg hover:bg-white hover:text-primary-700 transition duration-300 hover:shadow-lg hover:scale-105">
                 Explore Events
               </Link>
             </div>
 
             {/* Service Times Quick View */}
             <div className="grid md:grid-cols-2 gap-6 mt-12">
-              <div className="service-card bg-white bg-opacity-10 rounded-lg p-6 backdrop-blur-sm">
+              <div className="service-card bg-white bg-opacity-10 rounded-lg p-6 backdrop-blur-sm shadow-xl">
                 <p className="font-bold text-lg mb-2" style={{ color: "#C5E0B8" }}>SUNDAY SERVICE</p>
                 <p className="text-2xl font-bold">9:30 AM</p>
                 <p className="text-sm text-gray-300">Psalm Base Talisay</p>
               </div>
-              <div className="service-card bg-white bg-opacity-10 rounded-lg p-6 backdrop-blur-sm">
+              <div className="service-card bg-white bg-opacity-10 rounded-lg p-6 backdrop-blur-sm shadow-xl">
                 <p className="font-bold text-lg mb-2" style={{ color: "#C5E0B8" }}>WEDNESDAY PRAYER</p>
                 <p className="text-2xl font-bold">5:00 PM</p>
                 <p className="text-sm text-gray-300">Psalm Base Talisay</p>
