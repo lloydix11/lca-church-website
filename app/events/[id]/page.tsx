@@ -177,6 +177,14 @@ export default async function EventPage({ params }: Props) {
     
     lines.forEach(line => {
       const trimmed = line.trim();
+      
+      // Skip registration-related lines and URLs
+      if (trimmed.toLowerCase().includes('register') || 
+          trimmed.startsWith('http') ||
+          trimmed.includes('https://')) {
+        return;
+      }
+      
       // Check if this is a key detail (contains colon)
       if (trimmed.includes(':')) {
         const [label, ...rest] = trimmed.split(':');
