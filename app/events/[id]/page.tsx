@@ -128,26 +128,50 @@ export default async function EventPage({ params }: Props) {
 
   // Function to convert URLs in text to clickable links
   const renderDescriptionWithLinks = (text: string) => {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const parts = text.split(urlRegex);
-    
-    return parts.map((part, index) => {
-      // Check if part starts with http (more reliable than regex.test with global flag)
-      if (part && part.startsWith('http')) {
-        return (
-          <a 
-            key={index}
-            href={part} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-accent hover:underline font-semibold break-all"
-          >
-            {part}
-          </a>
+    // Handle newlines and text together
+    const urlRegex = /(https?:\/\/[^\s\n]+)/g;
+    let lastIndex = 0;
+    const elements: any[] = [];
+    let match;
+
+    while ((match = urlRegex.exec(text)) !== null) {
+      // Add text before the URL
+      if (match.index > lastIndex) {
+        elements.push(
+          <span key={`text-${lastIndex}`}>
+            {text.substring(lastIndex, match.index)}
+          </span>
         );
       }
-      return part ? <span key={index}>{part}</span> : null;
-    });
+
+      // Add the URL as a link
+      const url = match[0];
+      elements.push(
+        <a
+          key={`link-${match.index}`}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-accent hover:text-accent hover:underline font-semibold inline-block break-all"
+        >
+          {url}
+        </a>
+      );
+
+      lastIndex = urlRegex.lastIndex;
+    }
+
+    // Add remaining text after last URL
+    if (lastIndex < text.length) {
+      elements.push(
+        <span key={`text-${lastIndex}`}>
+          {text.substring(lastIndex)}
+        </span>
+      );
+    }
+
+    // If no URLs found, return the text as is
+    return elements.length === 0 ? text : elements;
   };
 
   // Parse description into structured items
