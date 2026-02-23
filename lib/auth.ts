@@ -2,7 +2,8 @@ import { cookies } from "next/headers";
 import crypto from "crypto";
 
 const ADMIN_SECRET = process.env.ADMIN_SECRET || "dev-secret-key-change-in-prod";
-const SESSION_MAX_AGE = 24 * 60 * 60; // 24 hours
+const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
+const SESSION_MAX_AGE = 30 * 60; // 30 minutes in seconds
 
 export async function verifyAdminPassword(password: string): Promise<boolean> {
   const adminPassword = process.env.ADMIN_PASSWORD || "admin";
@@ -43,7 +44,12 @@ export async function verifyAdminSession(): Promise<boolean> {
   if (signature !== expectedSignature) return false;
 
   const sessionAge = Date.now() - parseInt(timestamp);
-  if (sessionAge > SESSION_MAX_AGE * 1000) return false;
+  // Check if session has expired (30 minutes)
+  if (sessionAge > SESSION_TIMEOUT) {
+    // Session expired - clear it
+    await clearAdminSession();
+    return false;
+  }
 
   return true;
 }

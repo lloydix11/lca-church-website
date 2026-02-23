@@ -1,19 +1,34 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sessionExpired, setSessionExpired] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    // Check if session expired
+    const expired = searchParams.get("expired");
+    if (expired === "true") {
+      setSessionExpired(true);
+      // Clear the expired param after showing message
+      setTimeout(() => {
+        router.replace("/admin");
+      }, 5000);
+    }
+  }, [searchParams, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setSessionExpired(false);
 
     try {
       const res = await fetch("/api/admin-login", {
@@ -48,6 +63,12 @@ export default function AdminLogin() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {sessionExpired && (
+              <div className="p-4 bg-yellow-50 border border-yellow-200 rounded text-yellow-700 text-sm">
+                ⏱️ Your session has expired due to inactivity. Please login again.
+              </div>
+            )}
+
             {error && (
               <div className="p-4 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
                 {error}
@@ -77,7 +98,8 @@ export default function AdminLogin() {
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t text-center">
+          <div className="mt-6 pt-6 border-t text-center text-xs text-gray-500">
+            <p className="mb-3">Session timeout: 30 minutes of inactivity</p>
             <Link href="/" className="text-primary-600 hover:text-primary-700 text-sm">
               ← Back to Home
             </Link>
