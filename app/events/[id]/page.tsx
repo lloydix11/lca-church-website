@@ -132,20 +132,21 @@ export default async function EventPage({ params }: Props) {
     const parts = text.split(urlRegex);
     
     return parts.map((part, index) => {
-      if (urlRegex.test(part)) {
+      // Check if part starts with http (more reliable than regex.test with global flag)
+      if (part && part.startsWith('http')) {
         return (
           <a 
             key={index}
             href={part} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="text-accent hover:underline font-semibold"
+            className="text-accent hover:underline font-semibold break-all"
           >
             {part}
           </a>
         );
       }
-      return <span key={index}>{part}</span>;
+      return part ? <span key={index}>{part}</span> : null;
     });
   };
 
