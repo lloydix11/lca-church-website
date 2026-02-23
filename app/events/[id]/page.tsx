@@ -340,7 +340,7 @@ export default async function EventPage({ params }: Props) {
             </div>
 
             {/* Registration Button */}
-            {event.title.toLowerCase().includes("youth") && event.title.toLowerCase().includes("camp") && (
+            {event.title.toLowerCase().includes("camp") && (
               <div className="mt-10 pt-8 border-t-2">
                 <p className="text-gray-700 text-lg mb-4">Ready to join us?</p>
                 {registrationUrl ? (
@@ -371,7 +371,7 @@ export default async function EventPage({ params }: Props) {
       {/* CTA Section */}
       <section className="container py-16">
         <div className="max-w-4xl flex flex-col sm:flex-row gap-4">
-          {event.title.toLowerCase().includes("youth") && event.title.toLowerCase().includes("camp") && (
+          {event.title.toLowerCase().includes("camp") && (
             <Link
               href="/camp"
               className="flex-1 px-8 py-4 font-bold rounded-lg transition duration-300 text-center hover:shadow-lg hover:scale-105"
