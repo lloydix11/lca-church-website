@@ -3,6 +3,53 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
+const styles = `
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  .event-hero {
+    animation: fadeInDown 0.8s ease-out;
+  }
+  .info-card {
+    animation: scaleIn 0.6s ease-out forwards;
+  }
+  .info-card:nth-child(1) { animation-delay: 0.1s; }
+  .info-card:nth-child(2) { animation-delay: 0.2s; }
+  .detail-section {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+  .detail-section:nth-child(1) { animation-delay: 0.2s; }
+  .detail-section:nth-child(2) { animation-delay: 0.3s; }
+  .detail-section:nth-child(3) { animation-delay: 0.4s; }
+`;
+
 interface Props {
   params: Promise<{ id: string }>;
 }
@@ -77,78 +124,144 @@ export default async function EventPage({ params }: Props) {
   };
 
   return (
-    <div className="bg-gradient-to-b from-primary-50 to-cream">
-      <div className="container py-12">
-        <Link href="/events" className="text-primary-600 hover:text-primary-700 mb-6 inline-block">
-          ← Back to Events
-        </Link>
+    <div>
+      <style>{styles}</style>
+      {/* Hero Section */}
+      <section style={{ backgroundImage: "linear-gradient(135deg, #047857 0%, #6CBFDB 100%)" }} className="text-white py-16 md:py-24 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <svg className="w-full h-full" viewBox="0 0 1200 400" preserveAspectRatio="none">
+            <circle cx="200" cy="100" r="300" fill="currentColor" />
+            <circle cx="1000" cy="300" r="250" fill="currentColor" />
+          </svg>
+        </div>
 
-        <article className="max-w-4xl">
-          {event.posterImageUrl && (
-            <div className="mb-8 rounded-lg overflow-hidden h-96 bg-gray-200">
-              <img
-                src={event.posterImageUrl}
-                alt={event.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          )}
+        <div className="container relative z-10">
+          <Link href="/events" className="text-white hover:opacity-80 mb-6 inline-flex items-center gap-2 transition">
+            ← Back to Events
+          </Link>
 
-          <div className="bg-white rounded-lg p-8 shadow-md">
+          <div className="event-hero max-w-4xl">
             {isPast && (
-              <div className="rounded p-3 mb-6" style={{ backgroundColor: "#E8EDE8", borderColor: "#A9C3A3", borderWidth: "1px" }}>
-                <p className="font-semibold" style={{ color: "#2F4F2F" }}>📌 This event has passed.</p>
+              <div className="inline-block mb-4 px-4 py-2 rounded-full font-semibold" style={{ backgroundColor: "rgba(255,255,255,0.2)" }}>
+                ✓ Event Completed
+              </div>
+            )}
+            {!isPast && (
+              <div className="inline-block mb-4 px-4 py-2 rounded-full font-semibold" style={{ backgroundColor: "#C5E0B8", color: "#047857" }}>
+                📅 Upcoming Event
               </div>
             )}
 
-            <h1 className="heading-lg mb-6">{event.title}</h1>
+            <h1 className="text-5xl md:text-6xl font-bold mb-4 leading-tight">
+              {event.title}
+            </h1>
+            <p className="text-xl opacity-90 max-w-2xl">
+              Join us for an unforgettable experience of faith, community, and spiritual growth
+            </p>
+          </div>
+        </div>
+      </section>
 
-            <div className="grid md:grid-cols-2 gap-6 mb-8 pb-8 border-b">
-              <div>
-                <h3 className="text-sm font-semibold text-primary-600 mb-1">DATE</h3>
-                <p className="text-lg font-semibold text-gray-900">
+      {/* Poster Image */}
+      {event.posterImageUrl && (
+        <section className="container py-8">
+          <div className="rounded-xl overflow-hidden shadow-2xl h-80 md:h-96 bg-gray-200">
+            <img
+              src={event.posterImageUrl}
+              alt={event.title}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Key Info Cards */}
+      <section className="container py-12">
+        <div className="grid md:grid-cols-2 gap-6 max-w-3xl">
+          {/* Date Card */}
+          <div className="info-card bg-white rounded-xl p-8 shadow-lg border-l-4" style={{ borderLeftColor: "#6CBFDB" }}>
+            <div className="flex items-start gap-4">
+              <div className="text-4xl">📅</div>
+              <div className="flex-1">
+                <h3 className="text-sm font-bold uppercase tracking-wider" style={{ color: "#047857" }}>Date & Time</h3>
+                <p className="text-2xl font-bold text-gray-900 mt-2">
                   {eventDate.toLocaleDateString("en-US", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
+                    month: "short",
                     day: "numeric",
                   })}
                 </p>
-                <p className="text-gray-600">
+                <p className="text-gray-600 mt-1">
+                  {eventDate.toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                  })}
+                </p>
+                <p className="text-accent font-semibold mt-2">
                   {eventDate.toLocaleTimeString("en-US", {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}
                 </p>
               </div>
-              <div>
-                <h3 className="text-sm font-semibold text-primary-600 mb-1">LOCATION</h3>
-                <p className="text-lg font-semibold text-gray-900">
-                  📍 {event.location}
+            </div>
+          </div>
+
+          {/* Location Card */}
+          <div className="info-card bg-white rounded-xl p-8 shadow-lg border-l-4" style={{ borderLeftColor: "#C5E0B8" }}>
+            <div className="flex items-start gap-4">
+              <div className="text-4xl">📍</div>
+              <div className="flex-1">
+                <h3 className="text-sm font-bold uppercase tracking-wider" style={{ color: "#047857" }}>Location</h3>
+                <p className="text-2xl font-bold text-gray-900 mt-2">
+                  {event.location}
+                </p>
+                <p className="text-gray-600 mt-2">
+                  Find us on the map
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            <div className="prose max-w-none mb-8">
-              <h2 className="heading-md">About this Event</h2>
+      {/* About Section */}
+      <section style={{ backgroundColor: "#FFF8F0" }} className="py-16">
+        <div className="container max-w-4xl">
+          <div className="detail-section bg-white rounded-xl p-8 md:p-12 shadow-lg">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ color: "#047857" }}>
+              About this Event
+            </h2>
+            <div className="prose prose-lg max-w-none">
               <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-wrap">
                 {renderDescriptionWithLinks(event.description)}
               </p>
             </div>
-
-            <div className="pt-6 border-t flex gap-4">
-              {event.title.toLowerCase().includes("youth") && event.title.toLowerCase().includes("camp") && (
-                <Link href="/camp" className="btn btn-secondary">
-                  📝 Register Now
-                </Link>
-              )}
-              <Link href="/events" className="btn btn-primary">
-                Back to All Events
-              </Link>
-            </div>
           </div>
-        </article>
-      </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="container py-16">
+        <div className="max-w-4xl flex flex-col sm:flex-row gap-4">
+          {event.title.toLowerCase().includes("youth") && event.title.toLowerCase().includes("camp") && (
+            <Link
+              href="/camp"
+              className="flex-1 px-8 py-4 font-bold rounded-lg transition duration-300 text-center hover:shadow-lg hover:scale-105"
+              style={{ backgroundColor: "#6CBFDB", color: "white" }}
+            >
+              📝 Register Now
+            </Link>
+          )}
+          <Link
+            href="/events"
+            className="flex-1 px-8 py-4 font-bold rounded-lg border-2 transition duration-300 text-center hover:shadow-lg hover:scale-105"
+            style={{ borderColor: "#047857", color: "#047857", backgroundColor: "transparent" }}
+          >
+            Back to All Events
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }
+
