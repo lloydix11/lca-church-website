@@ -332,18 +332,28 @@ export default async function EventPage({ params }: Props) {
             </div>
 
             {/* Registration Button */}
-            {registrationUrl && (
+            {event.title.toLowerCase().includes("youth") && event.title.toLowerCase().includes("camp") && (
               <div className="mt-10 pt-8 border-t-2">
                 <p className="text-gray-700 text-lg mb-4">Ready to join us?</p>
-                <a
-                  href={registrationUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block px-8 py-4 font-bold rounded-lg transition duration-300 hover:shadow-lg hover:scale-105"
-                  style={{ backgroundColor: "#6CBFDB", color: "white" }}
-                >
-                  📝 Register Here
-                </a>
+                {registrationUrl ? (
+                  <a
+                    href={registrationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block px-8 py-4 font-bold rounded-lg transition duration-300 hover:shadow-lg hover:scale-105"
+                    style={{ backgroundColor: "#6CBFDB", color: "white" }}
+                  >
+                    📝 Register Here
+                  </a>
+                ) : (
+                  <button
+                    disabled
+                    className="inline-block px-8 py-4 font-bold rounded-lg opacity-50 cursor-not-allowed"
+                    style={{ backgroundColor: "#6CBFDB", color: "white" }}
+                  >
+                    📝 Register Here (Coming Soon)
+                  </button>
+                )}
               </div>
             )}
           </div>
