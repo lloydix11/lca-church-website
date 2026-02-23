@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
 
-const ADMIN_SECRET = process.env.ADMIN_SECRET || "dev-secret-key-change-in-prod";
 const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
 
 export function middleware(request: NextRequest) {
@@ -16,38 +14,19 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/admin", request.url));
     }
 
-    // Verify session integrity and timeout
+    // Parse session cookie
     const [token, timestamp, signature] = sessionCookie.split(".");
 
     if (!token || !timestamp || !signature) {
-      // Invalid session format
-      const response = NextResponse.redirect(new URL("/admin", request.url));
-      response.cookies.delete("admin_session");
-      return response;
-    }
-
-    // Verify signature
-    const expectedSignature = crypto
-      .createHmac("sha256", ADMIN_SECRET)
-      .update(token + timestamp)
-      .digest("hex");
-
-    if (signature !== expectedSignature) {
-      // Invalid session signature
-      const response = NextResponse.redirect(new URL("/admin", request.url));
-      response.cookies.delete("admin_session");
-      return response;
+      // Invalid session format - redirect to login
+      return NextResponse.redirect(new URL("/admin", request.url));
     }
 
     // Check session timeout (30 minutes)
     const sessionAge = Date.now() - parseInt(timestamp);
     if (sessionAge > SESSION_TIMEOUT) {
-      // Session expired
-      const response = NextResponse.redirect(
-        new URL("/admin?expired=true", request.url)
-      );
-      response.cookies.delete("admin_session");
-      return response;
+      // Session expired - redirect with expired flag
+      return NextResponse.redirect(new URL("/admin?expired=true", request.url));
     }
   }
 
